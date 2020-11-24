@@ -61,8 +61,8 @@ class Male(pygame.sprite.Sprite):
 
         # Actions
         if self.health <= 0 and self.lives >= 0:
-            self.rect.x = 64
-            self.rect.y = 64
+            self.rect.x = 300
+            self.rect.y = 100
             self.lives -= 1
             self.health = 300       
 

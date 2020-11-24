@@ -44,6 +44,7 @@ if __name__ == '__main__':
     downLim = 400
 
     male = recortar('male.png', 13, 21)
+    h = pygame.image.load('Heart.png')
 
     # Groups
     players = pygame.sprite.Group()
@@ -188,6 +189,7 @@ if __name__ == '__main__':
                     b.velx = 0
                     b.vely = 0
 
+        # Map collides
         if player.rect.right > rigthLim:
             player.rect.right = rigthLim
             # player.velx = 0
@@ -228,6 +230,12 @@ if __name__ == '__main__':
         else:
             player.collide = False
 
+        '''if mapx == 0 and player.velx == -5:
+            mapVelx = 0
+        
+        if mapy == 0 and player.vely == -5:
+            mapvely = 0'''
+
 
         if player.lives > 0:
             # Updates
@@ -235,16 +243,32 @@ if __name__ == '__main__':
             blocks.update()
             # Draw
             pantalla.fill(NEGRO)
+            blocks.draw(pantalla)
             pantalla.blit(mapLevel, [mapx, mapy])
             players.draw(pantalla)
-            blocks.draw(pantalla)
+
+            if player.lives == 3:
+                pantalla.blit(male[20][0], [0, 0])
+                pantalla.blit(male[20][0], [64, 0])
+                pantalla.blit(male[20][0], [128, 0])
+                pygame.draw.line(pantalla, ROJO, [192, 32], [192 + player.health, 32], 10)
+            if player.lives == 2:
+                pantalla.blit(male[20][0], [0, 0])
+                pantalla.blit(male[20][0], [64, 0])
+                pygame.draw.line(pantalla, ROJO, [192, 32], [192 + player.health, 32], 10)
+            if player.lives == 1:
+                pantalla.blit(male[20][0], [0, 0])
+                pygame.draw.line(pantalla, ROJO, [192, 32], [192 + player.health, 32], 10)
+
         else:
             death(male, player, mapLevel)
 
-        # pantalla.blit(link[4][5], [0, 0])
         pygame.display.flip()
         reloj.tick(15)
         mapx += mapVelx
         mapy += mapvely
+        # player.health -= 5
+        # print player.lives, player.health
+        # print player.rect.x, player.rect.y
 
     pygame.quit()

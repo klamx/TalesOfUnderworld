@@ -12,7 +12,7 @@ class Male(pygame.sprite.Sprite):
         # [8-11]: movements up, left, down, rigth
         # [12-15]: dagger hits up, left, down, rigth
         # [20]: death
-        self.lim = {0: 6, 1: 6, 2: 6, 3: 6,
+        self.lim = {0: 0, 1: 0, 2: 0, 3: 0,
                     4: 8, 5: 8, 6: 8, 7: 8,
                     8: 8, 9: 8, 10: 8, 11: 8,
                     12: 5, 13: 5, 14: 5, 15: 5,

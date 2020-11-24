@@ -25,10 +25,29 @@ class Male(pygame.sprite.Sprite):
         self.vely = 0
         self.health = 300
         self.lives = 3
-        self.tg = 0
+        self.hit_type = 0
+        self.blocks = []
+        self.collide = False
 
 
     def update(self):
+        #collides
+        ls_obj = pygame.sprite.spritecollide(self, self.blocks, False)
+
+        for b in ls_obj:
+            if self.rect.right > b.rect.left and self.velx > 0:
+                self.rect.right = b.rect.left
+                self.velx = 0
+            if self.rect.left < b.rect.right and self.velx < 0:
+                self.rect.left = b.rect.right
+                self.velx = 0
+            if self.rect.bottom > b.rect.top and self.vely > 0:
+                self.rect.bottom = b.rect.top
+                self.vely = 0
+            if self.rect.top < b.rect.bottom and self.vely < 0:
+                self.rect.top = b.rect.bottom
+                self.vely = 0
+        
         self.rect.x += self.velx
         self.rect.y += self.vely
         self.image = self.sheet[self.action][self.con]
@@ -47,7 +66,7 @@ class Male(pygame.sprite.Sprite):
             self.lives -= 1
             self.health = 300       
 
-        if self.velx == 0 and self.vely == 0:
+        if self.velx == 0 and self.vely == 0 and self.collide == False:
             if self.con < self.lim[self.action]:
                 self.con += 1
             else:

@@ -33,9 +33,11 @@ if __name__ == '__main__':
     infoMapLevel = mapLevel.get_rect()
 
     male = recortar('male.png', 13, 21)
+    h = pygame.image.load('Heart.png')
 
     # Groups
     players = pygame.sprite.Group()
+    hearts = pygame.sprite.Group()
 
     # Objects
     player = Male([64, 64], male)
@@ -123,11 +125,28 @@ if __name__ == '__main__':
             pantalla.fill(NEGRO)
             pantalla.blit(mapLevel, [0, 0])
             players.draw(pantalla)
+
+            if player.lives == 3:
+                pantalla.blit(male[20][0], [0, 0])
+                pantalla.blit(male[20][0], [64, 0])
+                pantalla.blit(male[20][0], [128, 0])
+                pygame.draw.line(pantalla, ROJO, [192, 32], [192 + player.health, 32], 10)
+            if player.lives == 2:
+                pantalla.blit(male[20][0], [0, 0])
+                pantalla.blit(male[20][0], [64, 0])
+                pygame.draw.line(pantalla, ROJO, [192, 32], [192 + player.health, 32], 10)
+            if player.lives == 1:
+                pantalla.blit(male[20][0], [0, 0])
+                pygame.draw.line(pantalla, ROJO, [192, 32], [192 + player.health, 32], 10)
+            if player.lives == 0:
+                pass
         else:
             death(male, player, mapLevel)
 
-        # pantalla.blit(link[4][5], [0, 0])
+        hearts.draw(pantalla)
         pygame.display.flip()
         reloj.tick(15)
+        player.health -= 5
+        print player.lives, player.health
 
     pygame.quit()

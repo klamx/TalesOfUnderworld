@@ -2,6 +2,7 @@ import pygame
 from male import Male
 from blocks import Block
 from key import Key
+from arrow import Arrow
 from lib import *
 
 def death(male, player, mapLevel):
@@ -28,7 +29,42 @@ if __name__ == '__main__':
     pygame.init()
     pantalla = pygame.display.set_mode([ANCHO, ALTO])
     fin = False
+    start = False
     reloj = pygame.time.Clock()
+
+    # Presentation
+    startBackGround = pygame.image.load('start.png')
+    arrow = pygame.image.load('arrow.png')
+
+    arrows = pygame.sprite.Group()
+    arr = Arrow([330, 460], arrow)
+    arrows.add(arr)
+
+    while not fin and not start:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                fin = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    arr.rect.y = 530
+
+                if event.key == pygame.K_UP:
+                    arr.rect.y = 460
+
+                if arr.rect.y == 460 and event.key == pygame.K_RETURN:
+                    start = True
+                    arrows.remove(arr)
+
+                if arr.rect.y == 530 and event.key == pygame.K_RETURN:
+                    start = True
+                    fin = True
+        
+        pantalla.fill(NEGRO)
+        pantalla.blit(startBackGround, [0, 0])
+        arrows.update()
+        arrows.draw(pantalla)
+        pygame.display.flip()
 
     # Imagenes
     mapLevel = pygame.image.load('Underworld.png')
@@ -118,9 +154,9 @@ if __name__ == '__main__':
     k1 = Key([100, 100], key)
 
     #keys.add(k1)
-    
+    endGame = False
 
-    while not fin:
+    while not fin and not endGame:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fin = True
@@ -259,6 +295,9 @@ if __name__ == '__main__':
 
         txt = nums.render('X ' + str(player.keys), True, BLANCO)
 
+        if player.lives == 0:
+            endGame = True
+
         if player.lives > 0:
             # Updates
             players.update()
@@ -289,12 +328,28 @@ if __name__ == '__main__':
         else:
             death(male, player, mapLevel)
 
+        
+
         pygame.display.flip()
         reloj.tick(15)
         mapx += mapVelx
         mapy += mapvely
-        # player.health -= 5
+        player.health -= 50
         # print player.lives, player.health
         # print player.rect.x, player.rect.y
+
+    gameOver = pygame.image.load('gameover.png')
+
+    while not fin:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                fin = True
+            
+            if event.type == pygame.KEYDOWN:
+                fin = True
+
+        pantalla.fill(NEGRO)
+        pantalla.blit(gameOver, [0, 0])
+        pygame.display.flip()
 
     pygame.quit()

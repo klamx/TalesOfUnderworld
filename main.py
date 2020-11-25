@@ -44,6 +44,10 @@ if __name__ == '__main__':
     arr = Arrow([330, 460], arrow)
     arrows.add(arr)
 
+    startMusic = pygame.mixer.Sound('sound/start.ogg')
+    startMusic.set_volume(0.2)
+    startMusic.play()
+
     while not fin and not start:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,6 +73,8 @@ if __name__ == '__main__':
         arrows.update()
         arrows.draw(pantalla)
         pygame.display.flip()
+    
+    startMusic.stop()
 
     # Imagenes
     mapLevel = pygame.image.load('img/Underworld.png')
@@ -199,6 +205,10 @@ if __name__ == '__main__':
     door = Door([256, 576], win)
     doors.add(door)
 
+    inGameMusic = pygame.mixer.Sound('sound/ingame.ogg')
+    inGameMusic.set_volume(0.2)
+    inGameMusic.play()
+
     while not fin and not endGame:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -233,7 +243,8 @@ if __name__ == '__main__':
 
                 '''if event.key == pygame.K_p:
                     iWon = True
-                    endGame = True'''
+                    endGame = True
+                    inGameMusic.stop()'''
 
                 # Hits
                 # Soft hit
@@ -419,6 +430,7 @@ if __name__ == '__main__':
 
         if player.lives == 0:
             endGame = True
+            inGameMusic.stop()
 
         if player.lives > 0:
             # Updates
@@ -467,6 +479,10 @@ if __name__ == '__main__':
 
     gameOver = pygame.image.load('img/gameover.png')
 
+    endMusic = pygame.mixer.Sound('sound/end.ogg')
+    endMusic.set_volume(0.2)
+    endMusic.play()
+
     while not fin:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -481,5 +497,8 @@ if __name__ == '__main__':
         else:
             pantalla.blit(gameOver, [0, 0])
         pygame.display.flip()
+    
+    endMusic.stop()
+    pygame.mixer.quit()
 
     pygame.quit()

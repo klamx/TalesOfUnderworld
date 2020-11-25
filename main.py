@@ -243,8 +243,8 @@ if __name__ == '__main__':
             blocks.update()
             # Draw
             pantalla.fill(NEGRO)
-            blocks.draw(pantalla)
             pantalla.blit(mapLevel, [mapx, mapy])
+            blocks.draw(pantalla)
             players.draw(pantalla)
 
             if player.lives == 3:

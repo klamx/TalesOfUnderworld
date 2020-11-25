@@ -1,6 +1,7 @@
 import pygame
 from male import Male
 from blocks import Block
+from key import Key
 from lib import *
 
 def death(male, player, mapLevel):
@@ -43,12 +44,16 @@ if __name__ == '__main__':
     upLim = 100
     downLim = 400
 
+    nums = pygame.font.Font(None, 38)
     male = recortar('male.png', 13, 21)
     h = pygame.image.load('Heart.png')
+    key = pygame.image.load('key.png')
+    keyi = pygame.image.load('keyi.png')
 
     # Groups
     players = pygame.sprite.Group()
     blocks = pygame.sprite.Group()
+    keys = pygame.sprite.Group()
 
     # Objects
     player = Male([64, 64], male)
@@ -108,6 +113,12 @@ if __name__ == '__main__':
     blocks.add(b10_2)
 
     player.blocks = blocks
+
+    # Keys
+    k1 = Key([100, 100], key)
+
+    #keys.add(k1)
+    
 
     while not fin:
         for event in pygame.event.get():
@@ -178,8 +189,13 @@ if __name__ == '__main__':
                         player.action = 7
                         player.con = 0
 
+                # Take
+                if event.key == pygame.K_d:
+                    player.take = True
+
             if event.type == pygame.KEYUP:
                 player.action = player.last
+                player.take = False
                 player.con = 0
                 player.velx = 0
                 player.vely = 0
@@ -188,6 +204,7 @@ if __name__ == '__main__':
                 for b in blocks:
                     b.velx = 0
                     b.vely = 0
+                
 
         # Map collides
         if player.rect.right > rigthLim:
@@ -197,6 +214,7 @@ if __name__ == '__main__':
             mapVelx = player.velx * -1
             for b in blocks:
                 b.velx = player.velx * -1
+
         else:
             player.collide = False
 
@@ -207,6 +225,7 @@ if __name__ == '__main__':
             mapVelx = player.velx * -1
             for b in blocks:
                 b.velx = player.velx * -1
+
         else:
             player.collide = False
 
@@ -217,6 +236,7 @@ if __name__ == '__main__':
             mapvely = player.vely * -1
             for b in blocks:
                 b.vely = player.vely * -1
+
         else:
             player.collide = False
 
@@ -227,6 +247,7 @@ if __name__ == '__main__':
             mapvely = player.vely * -1
             for b in blocks:
                 b.vely = player.vely * -1
+
         else:
             player.collide = False
 
@@ -236,6 +257,7 @@ if __name__ == '__main__':
         if mapy == 0 and player.vely == -5:
             mapvely = 0'''
 
+        txt = nums.render('X ' + str(player.keys), True, BLANCO)
 
         if player.lives > 0:
             # Updates
@@ -246,6 +268,10 @@ if __name__ == '__main__':
             pantalla.blit(mapLevel, [mapx, mapy])
             blocks.draw(pantalla)
             players.draw(pantalla)
+            #keys.draw(pantalla)
+
+            pantalla.blit(keyi, [512, 10])
+            pantalla.blit(txt, [580, 20])
 
             if player.lives == 3:
                 pantalla.blit(male[20][0], [0, 0])

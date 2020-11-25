@@ -7,7 +7,7 @@ class Male(pygame.sprite.Sprite):
         self.con = 0
         self.action = 3
         self.last = 3
-        # [0-3]: idle up, left, down, rigth
+        # [0-3]: take up, left, down, rigth
         # [4-7]: lance hits up, left, down, rigth
         # [8-11]: movements up, left, down, rigth
         # [12-15]: dagger hits up, left, down, rigth
@@ -16,6 +16,7 @@ class Male(pygame.sprite.Sprite):
                     4: 8, 5: 8, 6: 8, 7: 8,
                     8: 8, 9: 8, 10: 8, 11: 8,
                     12: 5, 13: 5, 14: 5, 15: 5,
+                    16: 0, 17: 0, 18: 0, 19: 0,
                     20: 6}
         self.image = self.sheet[self.action][self.con]
         self.rect = self.image.get_rect()
@@ -28,6 +29,8 @@ class Male(pygame.sprite.Sprite):
         self.hit_type = 0
         self.blocks = []
         self.collide = False
+        self.keys = 0
+        self.take = False
 
 
     def update(self):

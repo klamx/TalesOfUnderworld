@@ -265,8 +265,8 @@ if __name__ == '__main__':
             blocks.update()
             # Draw
             pantalla.fill(NEGRO)
-            pantalla.blit(mapLevel, [mapx, mapy])
             blocks.draw(pantalla)
+            pantalla.blit(mapLevel, [mapx, mapy])
             players.draw(pantalla)
             #keys.draw(pantalla)
 

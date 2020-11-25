@@ -1,12 +1,12 @@
 import pygame
-from male import Male
-from blocks import Block
-from key import Key
-from arrow import Arrow
-from generator import Generator
-from generator2 import Generator2
-from door import Door
-from lib import *
+from src.male import Male
+from src.blocks import Block
+from src.key import Key
+from src.arrow import Arrow
+from src.generator import Generator
+from src.generator2 import Generator2
+from src.door import Door
+from src.lib import *
 
 def death(male, player, mapLevel):
     pantalla.fill(NEGRO)
@@ -37,8 +37,8 @@ if __name__ == '__main__':
     reloj = pygame.time.Clock()
 
     # Presentation
-    startBackGround = pygame.image.load('start.png')
-    arrow = pygame.image.load('arrow.png')
+    startBackGround = pygame.image.load('img/start.png')
+    arrow = pygame.image.load('img/arrow.png')
 
     arrows = pygame.sprite.Group()
     arr = Arrow([330, 460], arrow)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         pygame.display.flip()
 
     # Imagenes
-    mapLevel = pygame.image.load('Underworld.png')
+    mapLevel = pygame.image.load('img/Underworld.png')
     infoMapLevel = mapLevel.get_rect()
     mapWidth = infoMapLevel[2]
     mapHeight = infoMapLevel[3]
@@ -85,14 +85,14 @@ if __name__ == '__main__':
     downLim = 400
 
     nums = pygame.font.Font(None, 38)
-    male = recortar('male.png', 13, 21)
-    h = pygame.image.load('Heart.png')
-    key = pygame.image.load('key.png')
-    keyi = pygame.image.load('keyi.png')
-    gen1 = pygame.image.load('gen1.png')
-    gen2 = pygame.image.load('gen2.png')
-    win = pygame.image.load('win.png')
-    winner = pygame.image.load('winner.png')
+    male = recortar('img/male.png', 13, 21)
+    h = pygame.image.load('img/Heart.png')
+    key = pygame.image.load('img/key.png')
+    keyi = pygame.image.load('img/keyi.png')
+    gen1 = pygame.image.load('img/gen1.png')
+    gen2 = pygame.image.load('img/gen2.png')
+    win = pygame.image.load('img/win.png')
+    winner = pygame.image.load('img/winner.png')
 
     # Groups
     players = pygame.sprite.Group()
@@ -210,26 +210,30 @@ if __name__ == '__main__':
                 if event.key == pygame.K_UP:
                     player.action = 8
                     player.velx = 0
-                    player.vely = -20
+                    player.vely = -5
                     player.last = 0
 
                 if event.key == pygame.K_LEFT:
                     player.action = 9
-                    player.velx = -20
+                    player.velx = -5
                     player.vely = 0
                     player.last = 1
 
                 if event.key == pygame.K_DOWN:
                     player.action = 10
                     player.velx = 0
-                    player.vely = 20
+                    player.vely = 5
                     player.last = 2
 
                 if event.key == pygame.K_RIGHT:
                     player.action = 11
-                    player.velx = 20
+                    player.velx = 5
                     player.vely = 0
                     player.last = 3
+
+                '''if event.key == pygame.K_p:
+                    iWon = True
+                    endGame = True'''
 
                 # Hits
                 # Soft hit
@@ -461,7 +465,7 @@ if __name__ == '__main__':
         # print player.lives, player.health
         # print player.rect.x, player.rect.y
 
-    gameOver = pygame.image.load('gameover.png')
+    gameOver = pygame.image.load('img/gameover.png')
 
     while not fin:
         for event in pygame.event.get():

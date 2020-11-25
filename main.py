@@ -200,7 +200,7 @@ if __name__ == '__main__':
                 player.velx = 0
                 player.vely = 0
                 mapVelx = 0
-                mapVely = 0
+                mapvely = 0
                 for b in blocks:
                     b.velx = 0
                     b.vely = 0
@@ -265,8 +265,8 @@ if __name__ == '__main__':
             blocks.update()
             # Draw
             pantalla.fill(NEGRO)
-            pantalla.blit(mapLevel, [mapx, mapy])
             blocks.draw(pantalla)
+            pantalla.blit(mapLevel, [mapx, mapy])
             players.draw(pantalla)
             #keys.draw(pantalla)
 

@@ -3,6 +3,9 @@ from male import Male
 from blocks import Block
 from key import Key
 from arrow import Arrow
+from generator import Generator
+from generator2 import Generator2
+from door import Door
 from lib import *
 
 def death(male, player, mapLevel):
@@ -30,6 +33,7 @@ if __name__ == '__main__':
     pantalla = pygame.display.set_mode([ANCHO, ALTO])
     fin = False
     start = False
+    iWon = False
     reloj = pygame.time.Clock()
 
     # Presentation
@@ -85,11 +89,18 @@ if __name__ == '__main__':
     h = pygame.image.load('Heart.png')
     key = pygame.image.load('key.png')
     keyi = pygame.image.load('keyi.png')
+    gen1 = pygame.image.load('gen1.png')
+    gen2 = pygame.image.load('gen2.png')
+    win = pygame.image.load('win.png')
+    winner = pygame.image.load('winner.png')
 
     # Groups
     players = pygame.sprite.Group()
     blocks = pygame.sprite.Group()
     keys = pygame.sprite.Group()
+    generators = pygame.sprite.Group()
+    generators2 = pygame.sprite.Group()
+    doors = pygame.sprite.Group()
 
     # Objects
     player = Male([64, 64], male)
@@ -163,6 +174,31 @@ if __name__ == '__main__':
     keys.add(k5)
     endGame = False
 
+    # Generators
+    g1 = Generator([1344, 70], gen1)
+    generators.add(g1)
+    g2 = Generator2([704, 1226], gen2)
+    generators.add(g2)
+    g3 = Generator([64, 798], gen1)
+    generators.add(g3)
+    g4 = Generator2([704, 1370], gen2)
+    generators.add(g4)
+    g5 = Generator([1150, 1660], gen1)
+    generators.add(g5)
+    g6 = Generator2([1728, 1660], gen2)
+    generators.add(g6)
+    g7 = Generator([1792, 360], gen1)
+    generators.add(g7)
+    g8 = Generator([2240, 864], gen1)
+    generators.add(g8)
+    g9 = Generator2([2500, 1150], gen2)
+    generators.add(g9)
+    g10 = Generator2([3070, 1230], gen2)
+    generators.add(g10)
+
+    door = Door([256, 576], win)
+    doors.add(door)
+
     while not fin and not endGame:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -174,24 +210,24 @@ if __name__ == '__main__':
                 if event.key == pygame.K_UP:
                     player.action = 8
                     player.velx = 0
-                    player.vely = -5
+                    player.vely = -20
                     player.last = 0
 
                 if event.key == pygame.K_LEFT:
                     player.action = 9
-                    player.velx = -5
+                    player.velx = -20
                     player.vely = 0
                     player.last = 1
 
                 if event.key == pygame.K_DOWN:
                     player.action = 10
                     player.velx = 0
-                    player.vely = 5
+                    player.vely = 20
                     player.last = 2
 
                 if event.key == pygame.K_RIGHT:
                     player.action = 11
-                    player.velx = 5
+                    player.velx = 20
                     player.vely = 0
                     player.last = 3
 
@@ -201,36 +237,53 @@ if __name__ == '__main__':
                     if player.last == 0:
                         player.action = 12
                         player.con = 0
+                        player.hit = player.hitType[0]
+                        player.conHit += 1
 
                     if player.last == 1:
                         player.action = 13
                         player.con = 0
+                        player.hit = player.hitType[0]
+                        player.conHit += 1
 
                     if player.last == 2:
                         player.action = 14
                         player.con = 0
+                        player.hit = player.hitType[0]
+                        player.conHit += 1
 
                     if player.last == 3:
                         player.action = 15
                         player.con = 0
+                        player.hit = player.hitType[0]
+                        player.conHit += 1
 
                 # Hard hit
-                if event.key == pygame.K_s:
-                    if player.last == 0:
-                        player.action = 4
-                        player.con = 0
+                if player.conHit >= 3:
+                    if event.key == pygame.K_s:
+                        if player.last == 0:
+                            player.action = 4
+                            player.con = 0
+                            player.hit = player.hitType[1]
+                            player.conHit = 0
 
-                    if player.last == 1:
-                        player.action = 5
-                        player.con = 0
+                        if player.last == 1:
+                            player.action = 5
+                            player.con = 0
+                            player.hit = player.hitType[1]
+                            player.conHit = 0
 
-                    if player.last == 2:
-                        player.action = 6
-                        player.con = 0
+                        if player.last == 2:
+                            player.action = 6
+                            player.con = 0
+                            player.hit = player.hitType[1]
+                            player.conHit = 0
 
-                    if player.last == 3:
-                        player.action = 7
-                        player.con = 0
+                        if player.last == 3:
+                            player.action = 7
+                            player.con = 0
+                            player.hit = player.hitType[1]
+                            player.conHit = 0
 
                 # Take
                 if event.key == pygame.K_d:
@@ -244,6 +297,12 @@ if __name__ == '__main__':
                 player.vely = 0
                 mapVelx = 0
                 mapvely = 0
+                for d in doors:
+                    d.velx = 0
+                    d.vely = 0
+                for g in generators:
+                    g.velx = 0
+                    g.vely = 0
                 for k in keys:
                     k.velx = 0
                     k.vely = 0
@@ -258,6 +317,10 @@ if __name__ == '__main__':
             # player.velx = 0
             player.collide = True
             mapVelx = player.velx * -1
+            for d in doors:
+                d.velx = player.velx * -1
+            for g in generators:
+                g.velx = player.velx * -1
             for k in keys:
                 k.velx = player.velx * -1
             for b in blocks:
@@ -271,6 +334,10 @@ if __name__ == '__main__':
             # player.velx = 0
             player.collide = True
             mapVelx = player.velx * -1
+            for d in doors:
+                d.velx = player.velx * -1
+            for g in generators:
+                g.velx = player.velx * -1
             for k in keys:
                 k.velx = player.velx * -1
             for b in blocks:
@@ -284,6 +351,10 @@ if __name__ == '__main__':
             # player.vely = 0
             player.collide = True
             mapvely = player.vely * -1
+            for d in doors:
+                d.vely = player.vely * -1
+            for g in generators:
+                g.vely = player.vely * -1
             for k in keys:
                 k.vely = player.vely * -1
             for b in blocks:
@@ -297,6 +368,10 @@ if __name__ == '__main__':
             # player.vely = 0
             player.collide = True
             mapvely = player.vely * -1
+            for d in doors:
+                d.vely = player.vely * -1
+            for g in generators:
+                g.vely = player.vely * -1
             for k in keys:
                 k.vely = player.vely * -1
             for b in blocks:
@@ -310,6 +385,25 @@ if __name__ == '__main__':
             if player.take == True:
                 keys.remove(k)
                 player.keys += 1
+
+        ls_gen = pygame.sprite.spritecollide(player, generators, False)
+        for g in ls_gen:
+            if g.healthMax == 800:
+                if (player.action >= 4 and player.action < 8) or (player.action >= 12 and player.action < 16):
+                    if player.hit == player.hitType[0]:
+                        g.health -= player.hit
+                    if player.hit == player.hitType[1]:
+                        g.health -= player.hit
+
+                if g.health <= 0:
+                    generators.remove(g)
+
+        ls_win = pygame.sprite.spritecollide(player, doors, False)
+        for d in ls_win:
+            if player.take == True and player.keys == 5:
+                iWon = True
+                endGame = True
+
 
         '''if mapx == 0 and player.velx == -5:
             mapVelx = 0
@@ -327,11 +421,15 @@ if __name__ == '__main__':
             players.update()
             blocks.update()
             keys.update()
+            generators.update()
+            doors.update()
             # Draw
             pantalla.fill(NEGRO)
             blocks.draw(pantalla)
             pantalla.blit(mapLevel, [mapx, mapy])
             keys.draw(pantalla)
+            generators.draw(pantalla)
+            doors.draw(pantalla)
             players.draw(pantalla)
 
             pantalla.blit(keyi, [512, 10])
@@ -374,7 +472,10 @@ if __name__ == '__main__':
                 fin = True
 
         pantalla.fill(NEGRO)
-        pantalla.blit(gameOver, [0, 0])
+        if iWon == True:
+            pantalla.blit(winner, [0, 0])
+        else:
+            pantalla.blit(gameOver, [0, 0])
         pygame.display.flip()
 
     pygame.quit()

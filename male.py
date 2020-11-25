@@ -26,7 +26,9 @@ class Male(pygame.sprite.Sprite):
         self.vely = 0
         self.health = 300
         self.lives = 3
-        self.hit_type = 0
+        self.hitType = {0: 10, 1: 50}
+        self.hit = 0
+        self.conHit = 0
         self.blocks = []
         self.collide = False
         self.keys = 0

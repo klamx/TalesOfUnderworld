@@ -75,7 +75,7 @@ if __name__ == '__main__':
     mapy = 0
     mapVelx = 0
     mapvely = 0
-    rigthLim = 600
+    rightLim = 600
     leftLim = 300
     upLim = 100
     downLim = 400
@@ -151,9 +151,16 @@ if __name__ == '__main__':
     player.blocks = blocks
 
     # Keys
-    k1 = Key([100, 100], key)
-
-    #keys.add(k1)
+    k1 = Key([128, 256], key)
+    keys.add(k1)
+    k2 = Key([3008, 201], key)
+    keys.add(k2)
+    k3 = Key([2688, 1088], key)
+    keys.add(k3)
+    k4 = Key([2048, 1408], key)
+    keys.add(k4)
+    k5 = Key([1472, 1408], key)
+    keys.add(k5)
     endGame = False
 
     while not fin and not endGame:
@@ -237,17 +244,22 @@ if __name__ == '__main__':
                 player.vely = 0
                 mapVelx = 0
                 mapvely = 0
+                for k in keys:
+                    k.velx = 0
+                    k.vely = 0
                 for b in blocks:
                     b.velx = 0
                     b.vely = 0
                 
 
         # Map collides
-        if player.rect.right > rigthLim:
-            player.rect.right = rigthLim
+        if player.rect.right > rightLim:
+            player.rect.right = rightLim
             # player.velx = 0
             player.collide = True
             mapVelx = player.velx * -1
+            for k in keys:
+                k.velx = player.velx * -1
             for b in blocks:
                 b.velx = player.velx * -1
 
@@ -259,6 +271,8 @@ if __name__ == '__main__':
             # player.velx = 0
             player.collide = True
             mapVelx = player.velx * -1
+            for k in keys:
+                k.velx = player.velx * -1
             for b in blocks:
                 b.velx = player.velx * -1
 
@@ -270,6 +284,8 @@ if __name__ == '__main__':
             # player.vely = 0
             player.collide = True
             mapvely = player.vely * -1
+            for k in keys:
+                k.vely = player.vely * -1
             for b in blocks:
                 b.vely = player.vely * -1
 
@@ -281,11 +297,19 @@ if __name__ == '__main__':
             # player.vely = 0
             player.collide = True
             mapvely = player.vely * -1
+            for k in keys:
+                k.vely = player.vely * -1
             for b in blocks:
                 b.vely = player.vely * -1
 
         else:
             player.collide = False
+
+        ls_keys = pygame.sprite.spritecollide(player, keys, False)
+        for k in ls_keys:
+            if player.take == True:
+                keys.remove(k)
+                player.keys += 1
 
         '''if mapx == 0 and player.velx == -5:
             mapVelx = 0
@@ -302,12 +326,13 @@ if __name__ == '__main__':
             # Updates
             players.update()
             blocks.update()
+            keys.update()
             # Draw
             pantalla.fill(NEGRO)
             blocks.draw(pantalla)
             pantalla.blit(mapLevel, [mapx, mapy])
+            keys.draw(pantalla)
             players.draw(pantalla)
-            #keys.draw(pantalla)
 
             pantalla.blit(keyi, [512, 10])
             pantalla.blit(txt, [580, 20])
@@ -334,7 +359,7 @@ if __name__ == '__main__':
         reloj.tick(15)
         mapx += mapVelx
         mapy += mapvely
-        player.health -= 50
+        # player.health -= 50
         # print player.lives, player.health
         # print player.rect.x, player.rect.y
 

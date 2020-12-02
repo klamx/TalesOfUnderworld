@@ -1,4 +1,5 @@
 import pygame
+import random
 from src.male import Male
 from src.blocks import Block
 from src.key import Key
@@ -6,6 +7,8 @@ from src.arrow import Arrow
 from src.generator import Generator
 from src.generator2 import Generator2
 from src.door import Door
+from src.enemy2 import Enemy2
+from src.trooper import Trooper
 from src.lib import *
 
 def death(male, player, mapLevel):
@@ -99,6 +102,8 @@ if __name__ == '__main__':
     gen2 = pygame.image.load('img/gen2.png')
     win = pygame.image.load('img/win.png')
     winner = pygame.image.load('img/winner.png')
+    enem1 = recortar('img/trooper.png', 12, 17)
+    bat = recortar('img/bat.png', 5, 14)
 
     # Groups
     players = pygame.sprite.Group()
@@ -107,6 +112,8 @@ if __name__ == '__main__':
     generators = pygame.sprite.Group()
     generators2 = pygame.sprite.Group()
     doors = pygame.sprite.Group()
+    enemys1 = pygame.sprite.Group()
+    enemys2 = pygame.sprite.Group()
 
     # Objects
     player = Male([64, 64], male)
@@ -324,6 +331,9 @@ if __name__ == '__main__':
                 for b in blocks:
                     b.velx = 0
                     b.vely = 0
+                for e2 in enemys1:
+                    e2.velx = 0
+                    e2.vely = 0
                 
 
         # Map collides
@@ -395,6 +405,7 @@ if __name__ == '__main__':
         else:
             player.collide = False
 
+        # Collides
         ls_keys = pygame.sprite.spritecollide(player, keys, False)
         for k in ls_keys:
             if player.take == True:
@@ -419,6 +430,66 @@ if __name__ == '__main__':
                 iWon = True
                 endGame = True
 
+        
+
+        # spawn generators
+        for g in generators:
+            if g.healthMax == 1000:
+                if g.tmp <= 0:
+                    e2 = Enemy2(g.rect.center, bat)
+
+                    dado = random.randrange(100)
+                    if dado < 25:
+                        e2.velx = 5
+                        e2.q['0'] = 1
+                        e2.q['1'] = 0
+                    elif dado < 50:
+                        e2.velx = -5
+                        e2.q['0'] = 1
+                        e2.q['1'] = 0
+                    elif dado < 75:
+                        e2.vely = 5
+                        e2.q['0'] = 0
+                        e2.q['2'] = 0
+                    else:
+                        e2.vely = -5
+                        e2.q['0'] = 0
+                        e2.q['2'] = 0
+
+                    e2.blocks = blocks
+                    enemys2.add(e2)
+                    g.tmp = random.randrange(50, 250)
+
+            if g.healthMax == 800:
+                if g.tmp <= 0:
+                    e1 = Trooper(g.rect.center, enem1)
+                    enemys1.add(e1)
+                    g.tmp = random.randrange(50, 250)
+            
+            # TODO: arreglar la generacion de enemigos
+
+        ls_e2 = pygame.sprite.spritecollide(player, enemys2, False)
+        for e2 in ls_e2:
+            player.health -= e2.dmg
+            enemys2.remove(e2)
+
+            if e2.liveTime <= 0:
+                enemys2.remove(e2)
+            
+        for e in enemys1:
+            if e.temp_m == -10:
+                e.estado = 1
+                e.temp_m -= 1
+
+        ls_e1 = pygame.sprite.spritecollide(player, enemys1, False)
+        for e1 in ls_e1:
+            if e1.direc_ataque == 0 or e1.direc_ataque == 5 or e1.direc_ataque == 10 or e1.direc_ataque == 13:
+                player.health -= e1.dmg
+            '''if e1.atk == True:
+                player.health -= e1.dmg
+            if e1.health <= 0:
+                enemys1.remove(e1)'''
+
 
         '''if mapx == 0 and player.velx == -5:
             mapVelx = 0
@@ -439,6 +510,8 @@ if __name__ == '__main__':
             keys.update()
             generators.update()
             doors.update()
+            enemys1.update()
+            enemys2.update()
             # Draw
             pantalla.fill(NEGRO)
             blocks.draw(pantalla)
@@ -446,6 +519,8 @@ if __name__ == '__main__':
             keys.draw(pantalla)
             generators.draw(pantalla)
             doors.draw(pantalla)
+            enemys1.draw(pantalla)
+            enemys2.draw(pantalla)
             players.draw(pantalla)
 
             pantalla.blit(keyi, [512, 10])

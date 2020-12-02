@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Generator2(pygame.sprite.Sprite):
     def __init__(self, pos, sheet):
@@ -7,7 +8,7 @@ class Generator2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = pos[0]
         self.rect.y = pos[1]
-        self.tmp = 30
+        self.tmp = random.randrange(100, 1000)
         self.velx = 0
         self.vely = 0
         self.healthMax = 1000
